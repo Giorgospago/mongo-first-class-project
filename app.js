@@ -7,6 +7,9 @@ require('dotenv').config();
 // Require MongoDB connection and Models
 require("./config/db");
 
+// Require Controllers
+const UsersController = require("./controllers/UsersController");
+
 // Initialize my Express app
 const app = express();
 app.listen(process.env.PORT);
@@ -15,39 +18,16 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+// Home Route
 app.get("/", (req, res) => {
     res.send("OK");
 });
 
-app.get("/users", (req, res) => {
-    User.find({}, (err, users) => {
-        res.json(users);
-    });
-});
+// User Routes
+app.get("/users", UsersController.list);
+app.get("/users/:userId", UsersController.getOne);
+app.post("/users", UsersController.create);
+app.delete("/users/:userId", UsersController.deleteUser);
+app.put("/users/:userId", UsersController.update);
 
-app.get("/users/:userId", (req, res) => {
-    User.findById(req.params.userId, (err, users) => {
-        res.json(users);
-    });
-});
-
-app.post("/users", (req, res) => {
-    const u = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email
-    });
-    u.save().then(() => {
-        res.json({
-            message: "User created"
-        });
-    });
-});
-
-app.delete("/users/:userId", (req, res) => {
-    User.deleteOne({_id: req.params.userId}, (err) => {
-        res.json({
-            message: "User Deleted"
-        });
-    });
-});
+// Product Routes
