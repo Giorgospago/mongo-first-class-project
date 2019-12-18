@@ -10,3 +10,17 @@ global.User = mongoose.model("User", {
     lastName: String,
     email: String
 });
+
+global.Product = mongoose.model("Product", {
+    category: mongoose.Types.ObjectId,
+    title: String,
+    miniDescription: String,
+    description: String,
+    price: Number,
+    sale: Number,
+    photo: String
+});
+
+global.Category = mongoose.model("Category", {
+    title: String
+});
