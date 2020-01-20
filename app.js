@@ -34,6 +34,7 @@ app.put("/users/:userId", UsersController.update);
 
 // Product Routes
 app.get("/products", ProductsController.list);
+app.post("/products/cart", ProductsController.listCart);
 app.get("/products/:productId", ProductsController.getOne);
 app.post("/products", ProductsController.create);
 app.delete("/products/:productId", ProductsController.deleteProduct);
