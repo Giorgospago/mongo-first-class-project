@@ -1,29 +1,28 @@
-const list = (req, res) => {
-    Product.find({})
+const list = async (req, res) => {
+    const products = await Product
+        .find({})
         .populate("category")
-        .exec((err, products) => {
-            res.json(products);
-        });
+        .exec();
+    res.json(products);
 };
 
-const listByCategory = (req, res) => {
-    Product
+const listByCategory = async (req, res) => {
+    const products = await Product
         .find({category: req.params.categoryId})
-        .exec((err, products) => {
-            res.json(products);
-        });
+        .exec();
+    res.json(products);
 };
 
-const getOne = (req, res) => {
-    Product
+const getOne = async (req, res) => {
+    const product = await Product
         .findById(req.params.productId)
         .populate("category")
-        .exec((err, product) => {
-            res.json(product);
-        });
+        .exec();
+
+    res.json(product);
 };
 
-const create = (req, res) => {
+const create = async (req, res) => {
     const u = new Product({
         category: req.body.category,
         title: req.body.title,
@@ -33,23 +32,22 @@ const create = (req, res) => {
         sale: req.body.sale,
         photo: req.body.photo
     });
-    u.save().then(() => {
-        res.json({
-            message: "Product created"
-        });
+    await u.save();
+    res.json({
+        message: "Product created"
     });
 };
 
-const deleteProduct = (req, res) => {
-    Product.deleteOne({_id: req.params.productId}, (err) => {
-        res.json({
-            message: "Product Deleted"
-        });
-    });
+const deleteProduct = async (req, res) => {
+    await Product
+    .deleteOne({_id: req.params.productId})
+    .exec();
+    
+    res.json({message: "Product Deleted"});
 };
 
-const update = (req, res) => {
-    Product.updateOne({_id: req.params.productId}, 
+const update = async (req, res) => {
+    await Product.updateOne({_id: req.params.productId}, 
     {
         category: req.body.category,
         title: req.body.title,
@@ -58,10 +56,10 @@ const update = (req, res) => {
         price: req.body.price,
         sale: req.body.sale,
         photo: req.body.photo
-    }, (err) => {
-        res.json({
-            message: "Product Updated"
-        });
+    }).exec();
+
+    res.json({
+        message: "Product Updated"
     });
 };
 
