@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const list = async (req, res) => {
     const products = await Product
         .find({})
@@ -21,12 +23,18 @@ const listByCategory = async (req, res) => {
 };
 
 const getOne = async (req, res) => {
-    const product = await Product
-        .findById(req.params.productId)
-        .populate("category")
-        .exec();
+    if (mongoose.Types.ObjectId.isValid(req.params.productId)) {
+        const product = await Product
+            .findById(req.params.productId)
+            .populate("category")
+            .exec();
 
-    res.json(product);
+        res.json(product);
+    } else {
+        res.json({
+            message: "Product not found"
+        });
+    }
 };
 
 const create = async (req, res) => {
