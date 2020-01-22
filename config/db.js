@@ -18,20 +18,23 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String, 
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
         required: true,
         bcrypt: true
     }
+}, {
+    timestamps: true
 });
 userSchema.plugin(bcrypt);
 global.User = mongoose.model("User", userSchema);
 
 
 // Product Model
-global.Product = mongoose.model("Product", {
+const productSchema = mongoose.Schema({
     category: {
         type: mongoose.Types.ObjectId,
         ref: "Category"
@@ -42,9 +45,19 @@ global.Product = mongoose.model("Product", {
     price: Number,
     sale: Number,
     photo: String
+}, {
+    timestamps: true
 });
 
+global.Product = mongoose.model("Product", productSchema);
+
 // Category Model
-global.Category = mongoose.model("Category", {
-    title: String
+const categorySchema = mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    }
+}, {
+    timestamps: true
 });
+global.Category = mongoose.model("Category", categorySchema);
