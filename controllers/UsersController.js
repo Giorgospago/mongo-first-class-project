@@ -26,7 +26,8 @@ const create = (req, res) => {
         })
         .catch((err) => {
             res.json({
-                message: "User Not created"
+                message: "User Not created",
+                error: err
             });
         });
 };
@@ -43,7 +44,9 @@ const update = (req, res) => {
     User.updateOne({_id: req.params.userId}, {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        email: req.body.email
+        email: req.body.email,
+        password: req.body.password,
+        role: req.body.role
     }, (err) => {
         res.json({
             message: "User Updated"

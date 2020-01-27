@@ -9,7 +9,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // User Model
 const userSchema = mongoose.Schema({
     firstName: {
-        type: String, 
+        type: String,
         required: true
     },
     lastName: {
@@ -25,6 +25,12 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         bcrypt: true
+    },
+    role: {
+        type: String,
+        required: true,
+        default: "client",
+        enum: ["client", "admin", "superUser"]
     }
 }, {
     timestamps: true
