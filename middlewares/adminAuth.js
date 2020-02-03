@@ -16,6 +16,7 @@ const AdminAuth = async (req, res, next) => {
     } catch (err) {
         return res.json({
             success: false,
+            error: err.name,
             message: "JWT Error"
         });
     }
