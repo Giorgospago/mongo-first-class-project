@@ -58,7 +58,7 @@ const create = async (req, res) => {
         description: req.body.description,
         price: req.body.price,
         sale: req.body.sale,
-        photo: req.body.photo
+        photo: req.file.filename
     });
     await p.save();
 
