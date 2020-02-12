@@ -6,6 +6,7 @@ require('dotenv').config();
 
 // Require MongoDB connection and Models
 require("./config/db");
+require("./config/mail");
 
 // Initialize my Express app
 const app = express();

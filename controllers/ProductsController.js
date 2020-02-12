@@ -51,7 +51,7 @@ const getOne = async (req, res) => {
 };
 
 const create = async (req, res) => {
-    const u = new Product({
+    const p = new Product({
         category: req.body.category,
         title: req.body.title,
         miniDescription: req.body.miniDescription,
@@ -60,7 +60,15 @@ const create = async (req, res) => {
         sale: req.body.sale,
         photo: req.body.photo
     });
-    await u.save();
+    await p.save();
+
+    await Mail.sendMail({
+        from: "App-isteuto <test@develobird.gr>",
+        to: "giorgospago23@gmail.com",
+        subject: "New Product just created",
+        html: "<h1>" + p.title + "</h1><h2>" + req.user.firstName + "</h2>"
+    });
+
     res.json({
         success: true,
         message: "Product created"
@@ -89,6 +97,18 @@ const update = async (req, res) => {
         sale: req.body.sale,
         photo: req.body.photo
     }).exec();
+
+    await Mail.sendMail({
+        from: "App-isteuto <test@develobird.gr>",
+        to: "giorgospago23@gmail.com",
+        subject: "Product just updated",
+        html: `
+            <img src="${req.body.photo}" height="150"/>
+            <h1>${req.body.title}</h1>
+            <h5>${req.body.miniDescription}</h5>
+            <h2>${req.body.price}</h2>
+        `
+    }); 
 
     res.json({
         success: true,
