@@ -30,6 +30,8 @@ const adminLogin = async (req, res) => {
             {expiresIn: process.env.JWT_EXPIRES_IN}
         );
 
+        slack("login", user.firstName + " " + user.lastName + " has logged in.");
+        
         return res.json({
             success: true,
             token: token,

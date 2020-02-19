@@ -95,7 +95,8 @@ const update = async (req, res) => {
         description: req.body.description,
         price: req.body.price,
         sale: req.body.sale,
-        photo: req.body.photo
+        photo: req.body.photo,
+        gallery: req.body.gallery
     }).exec();
 
     await Mail.sendMail({
@@ -104,7 +105,7 @@ const update = async (req, res) => {
         subject: "Product just updated",
         html: `
             <img src="${req.body.photo}" height="150"/>
-            <h1>${req.body.title}</h1>
+            <h1 style="color:#ff0000">${req.body.title}</h1>
             <h5>${req.body.miniDescription}</h5>
             <h2>${req.body.price}</h2>
         `

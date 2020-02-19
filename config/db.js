@@ -50,7 +50,8 @@ const productSchema = mongoose.Schema({
     description: String,
     price: Number,
     sale: Number,
-    photo: String
+    photo: String,
+    gallery: [String]
 }, {
     timestamps: true
 });

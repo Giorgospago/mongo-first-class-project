@@ -26,12 +26,4 @@ route.get("/email", async (req, res) => {
     });
 });
 
-route.post("/upload", upload.single("avatar"), (req, res) => {
-    console.log(req.file.filename);
-    res.json({
-        success: true,
-        message: "File uploaded"
-    });
-});
-
 module.exports = route;

@@ -8,6 +8,7 @@ require('dotenv').config();
 require("./config/db");
 require("./config/mail");
 require("./config/multer");
+require("./config/slack");
 
 // Initialize my Express app
 const app = express();
