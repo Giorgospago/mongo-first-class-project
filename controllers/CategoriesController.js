@@ -6,6 +6,16 @@ const list = async (req, res) => {
     });
 };
 
+const getProductsByCategory = async (req, res) => {
+    const category = await Category.findById(req.params.categoryId).exec();
+    const products = await Product.find({category: req.params.categoryId}).exec();
+    return res.json({
+        success: true,
+        category: category,
+        products: products
+    });
+};
+
 const getOne = (req, res) => {
     Category.findById(req.params.categoryId, (err, users) => {
         res.json(users);
@@ -46,5 +56,6 @@ module.exports = {
     getOne,
     create,
     deleteCategory,
-    update
+    update,
+    getProductsByCategory
 };
