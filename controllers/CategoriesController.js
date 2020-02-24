@@ -1,6 +1,8 @@
-const list = (req, res) => {
-    Category.find({}, (err, users) => {
-        res.json(users);
+const list = async (req, res) => {
+    const categories = await Category.find({}).exec();
+    return res.json({
+        success: true,
+        categories: categories
     });
 };
 

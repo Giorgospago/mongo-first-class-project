@@ -26,4 +26,12 @@ route.get("/email", async (req, res) => {
     });
 });
 
+route.use((req, res) => {
+    return res.json({
+        success: false,
+        message: "Page not found"
+    });
+});
+
+
 module.exports = route;
