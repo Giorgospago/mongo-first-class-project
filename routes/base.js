@@ -8,6 +8,12 @@ route.get("/", (req, res) => {
         message: "Home Page"
     });
 });
+route.get("/languages", (req, res) => {
+    res.json({
+        success: true,
+        languages: global.languagesObj
+    });
+});
 route.use("/admin", require("./admin/admin"));
 route.use("/client", require("./client/client"));
 

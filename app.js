@@ -1,10 +1,12 @@
 // Third party libraries
 const express = require("express");
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const cors = require("cors");
 require('dotenv').config();
 
 // Require MongoDB connection and Models
+require("./config/languages");
 require("./config/db");
 require("./config/mail");
 require("./config/multer");
@@ -17,6 +19,11 @@ app.listen(process.env.PORT);
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use((req, res, next) => {
+    mongoose.setDefaultLanguage(req.headers.lang || req.cookies.lang);
+    next();
+});
 
 app.use("/uploads", express.static('uploads'));
 

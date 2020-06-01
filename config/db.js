@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
+global.mongoose = require("mongoose");
 const bcrypt = require("mongoose-bcrypt");
+const mongooseIntl = require('mongoose-intl');
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -63,9 +64,14 @@ const categorySchema = mongoose.Schema({
     title: {
         type: String,
         required: true,
+        intl: true,
         unique: true
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        virtuals: true
+    }
 });
+categorySchema.plugin(mongooseIntl, {languages: global.languages, defaultLanguage: global.defaultLanguage});
 global.Category = mongoose.model("Category", categorySchema);

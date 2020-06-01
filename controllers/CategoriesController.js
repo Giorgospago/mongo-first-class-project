@@ -17,8 +17,8 @@ const getProductsByCategory = async (req, res) => {
 };
 
 const getOne = (req, res) => {
-    Category.findById(req.params.categoryId, (err, users) => {
-        res.json(users);
+    Category.findById(req.params.categoryId, null,{lean: true},(err, category) => {
+        res.json(category);
     });
 };
 
