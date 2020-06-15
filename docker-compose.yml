@@ -1,0 +1,61 @@
+version: '3.7'
+
+volumes:
+  esdata: {}
+
+services:
+
+    ### MongoDB Container #######################################
+    mongo:
+      hostname: mongo
+      dns:
+        - "8.8.8.8"
+        - "8.8.4.4"
+      dns_search: '' #fix for windows dns resolve.conf
+      image: "mongo:latest"
+      ports:
+        - "27017:27017"
+      volumes:
+        - ./docker_data/mongo:/data/db
+
+    ### Node Container #######################################
+    node:
+      hostname: node
+      dns:
+        - "8.8.8.8"
+        - "8.8.4.4"
+      dns_search: '' #fix for windows dns resolve.conf
+      image: "node:latest"
+      user: "node"
+      working_dir: /home/node/app
+      volumes:
+        - ./:/home/node/app
+      ports:
+        - "5000:3000"
+      tty: true
+      command: "npm run dev"
+
+    ### Elasticsearch Container #######################################
+    elasticsearch:
+      hostname: elasticsearch
+      dns_search: ''
+      dns:
+        - "8.8.8.8"
+        - "8.8.4.4"
+      image: "elasticsearch:7.6.1"
+      volumes:
+        - esdata:/usr/share/elasticsearch/data
+      environment:
+        - "network.host=0.0.0.0"
+        - "network.publish_host=elasticsearch"
+        - "transport.publish_host=elasticsearch"
+        - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.transport.cname_in_publish_address=true"
+        - "xpack.security.enabled=false"
+        - "node.name=elasticsearch"
+        - "node.master=true"
+        - "node.data=true"
+        - "node.ingest=true"
+        - "discovery.type=single-node"
+      ports:
+        - "9200:9200"
+        - "9300:9300"

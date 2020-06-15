@@ -1,8 +1,25 @@
 const list = async (req, res) => {
-    const categories = await Category.find({}).exec();
+    let categories = [];
+
+    if (req.query.es == 1) {
+        Category.search({match_all: {}}, (err, result) => {
+            return res.json({
+                success: true,
+                categories: result.hits.hits
+            });
+        });
+    } else {
+        categories = await Category.find({}).exec();
+        return res.json({
+            success: true,
+            categories: categories
+        });
+    }
+};
+const sync = async (req, res) => {
+    Category.synchronize();
     return res.json({
-        success: true,
-        categories: categories
+        success: true
     });
 };
 
@@ -53,6 +70,7 @@ const update = (req, res) => {
 
 module.exports = {
     list,
+    sync,
     getOne,
     create,
     deleteCategory,

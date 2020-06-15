@@ -1,6 +1,7 @@
 global.mongoose = require("mongoose");
 const bcrypt = require("mongoose-bcrypt");
 const mongooseIntl = require('mongoose-intl');
+const mongoosastic = require('mongoosastic');
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -65,7 +66,8 @@ const categorySchema = mongoose.Schema({
         type: String,
         required: true,
         intl: true,
-        unique: true
+        unique: false,
+        es_type: "nested"
     }
 }, {
     timestamps: true,
@@ -74,4 +76,8 @@ const categorySchema = mongoose.Schema({
     }
 });
 categorySchema.plugin(mongooseIntl, {languages: global.languages, defaultLanguage: global.defaultLanguage});
+categorySchema.plugin(mongoosastic, {
+    host: "elasticsearch",
+    port: 9200
+});
 global.Category = mongoose.model("Category", categorySchema);
