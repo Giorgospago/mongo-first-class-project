@@ -53,7 +53,8 @@ const productSchema = mongoose.Schema({
     price: Number,
     sale: Number,
     photo: String,
-    gallery: [String]
+    gallery: [String],
+    visionData: mongoose.Schema.Types.Mixed
 }, {
     timestamps: true
 });

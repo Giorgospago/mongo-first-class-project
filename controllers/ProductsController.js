@@ -1,10 +1,20 @@
+const path = require("path");
 const mongoose = require("mongoose");
+const Helpers = require("../config/helpers");
 
 const list = async (req, res) => {
+    const filters = {};
+
+    if (req.query.key) {
+        filters.title = {$regex: req.query.key, $options: "i"};
+    }
+    
     const products = await Product
-        .find({})
-        .populate("category")
+        .find(filters, "title")
+        .sort("-_id")
+        // .populate("category")
         .exec();
+
     res.json({
         success: true,
         products: products
@@ -51,6 +61,16 @@ const getOne = async (req, res) => {
 };
 
 const create = async (req, res) => {
+    const imageUrl = path.join(__dirname, "../uploads/", req.file.filename);
+    const safe = await Helpers.safeDetection(imageUrl);
+    
+    if (!["UNLIKELY", "VERY_UNLIKELY"].includes(safe.adult)) {
+        return res.json({
+            success: false,
+            message: "prosexe ti anevazeis"
+        });
+    }
+
     const p = new Product({
         category: req.body.category,
         title: req.body.title,
@@ -58,16 +78,19 @@ const create = async (req, res) => {
         description: req.body.description,
         price: req.body.price,
         sale: req.body.sale,
-        photo: req.file.filename
+        photo: req.file.filename,
+        visionData: safe
     });
     await p.save();
 
-    await Mail.sendMail({
-        from: "App-isteuto <test@develobird.gr>",
-        to: "giorgospago23@gmail.com",
-        subject: "New Product just created",
-        html: "<h1>" + p.title + "</h1><h2>" + req.user.firstName + "</h2>"
-    });
+    
+
+    // await Mail.sendMail({
+    //     from: "App-isteuto <test@develobird.gr>",
+    //     to: "giorgospago23@gmail.com",
+    //     subject: "New Product just created",
+    //     html: "<h1>" + p.title + "</h1><h2>" + req.user.firstName + "</h2>"
+    // });
 
     res.json({
         success: true,
@@ -117,6 +140,22 @@ const update = async (req, res) => {
     });
 };
 
+const stats = async (req, res) => {
+    const results = await Product.aggregate([
+        {
+            $group: {
+                _id: "$visionData.adult",
+                total: {$sum: 1}
+            }
+        }
+    ]);
+
+    return res.json({
+        success: true,
+        data: results
+    });
+};
+
 module.exports = {
     list,
     listCart,
@@ -124,5 +163,6 @@ module.exports = {
     getOne,
     create,
     deleteProduct,
-    update
+    update,
+    stats
 };

@@ -2,6 +2,8 @@ const express = require("express");
 const ProductsController = require("../../controllers/ProductsController");
 const route = express.Router();
 
+route.get("/stats", ProductsController.stats);
+
 route.get("/", ProductsController.list);
 route.post("/cart", ProductsController.listCart);
 route.get("/:productId", ProductsController.getOne);

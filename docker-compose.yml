@@ -28,6 +28,8 @@ services:
       image: "node:latest"
       user: "node"
       working_dir: /home/node/app
+      environment:
+        - GOOGLE_APPLICATION_CREDENTIALS=/home/node/app/sa.json
       volumes:
         - ./:/home/node/app
       ports:

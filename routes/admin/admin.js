@@ -12,7 +12,7 @@ route.get("/", AdminAuth, (req, res) => {
 route.get("/stats", AdminAuth, StatsController.dashboardStats);
 route.use("/auth", require("./auth"));
 route.use("/users", AdminAuth, require("./users"));
-route.use("/products", AdminAuth, require("./products"));
+route.use("/products", /*AdminAuth,*/ require("./products"));
 route.use("/categories", /*AdminAuth,*/ require("./categories"));
 
 route.post("/upload", upload.single('file'), (req, res) => {
